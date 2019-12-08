@@ -15,7 +15,6 @@ def RegUser(user, id_num):
     user = user.lower()
     user = user.lstrip()
 
-
     if id_num[0] == '!':
         role = 1  # Manager
     elif id_num[0] == '*':

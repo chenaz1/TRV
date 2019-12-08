@@ -16,6 +16,9 @@ def NoUser():
 def delete():
     screen3.destroy()
 
+def delete2():
+    screen1.destroy()
+
 def delete1(): #Delete Login Second Screen
     screen2.destroy()
 
@@ -30,6 +33,7 @@ def reg_user():
     Username_entry.delete(0,END)
     ID_entry.delete(0, END)
     Label(screen1, text="Register Sucsessfuly added").pack()
+    Button(screen1, text="Close", command = delete2).pack()
 
 def login_ver():
     User1 = UserNameVerify.get()
@@ -67,7 +71,7 @@ def login():
     UserVerify_entry = Entry(screen2, textvariable=UserNameVerify)
     UserVerify_entry.pack()
     Label(screen2, text="ID *").pack()
-    IDVerify_entry = Entry(screen2, textvariable=IDVerify)
+    IDVerify_entry = Entry(screen2, textvariable=IDVerify, show="*")
     IDVerify_entry.pack()
     Label(screen2, text="").pack()
     Button(screen2, text="Log in", width=10, height=1, command = login_ver).pack()
@@ -94,7 +98,7 @@ def register():
     Username_entry = Entry(screen1, textvariable=UserName)
     Username_entry.pack()
     Label(screen1, text="ID *").pack()
-    ID_entry = Entry(screen1, textvariable=PersonID)
+    ID_entry = Entry(screen1, textvariable=PersonID, show="*")
     ID_entry.pack()
     Label(screen1, text="").pack()
     Button(screen1, text="register", width=10, height=1, command=reg_user).pack()

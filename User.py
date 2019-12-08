@@ -34,7 +34,9 @@ def checkPermit(idn, role):
         return True
     return False
 
-
+def canSeeQuesion(idn):
+    tmp = Query()
+    userDB.search(tmp.id == idn)
 userDB.purge()
 RegUser('man', '!123456')
 RegUser('man','!123456')

@@ -28,6 +28,7 @@ def RegUser(name, id_num):
 
 
 def checkPermit(idn, role):
+    # return true if user have permit
     tmp = Query()
     if userDB.search((tmp['role'] == role) & (tmp.id == idn)):
         return True
@@ -40,5 +41,6 @@ RegUser('man','!123456')
 RegUser('man','!1234')
 RegUser('parent', '*123')
 RegUser('kid', '123')
-print(userDB.all())
-print(checkPermit(123456789, 3))
+
+
+

@@ -5,11 +5,9 @@ from tinydb import TinyDB, Query
 
 def NoUser():
     global screen3
-    screen3 = Toplevel(screen2)
-    screen3.title("")
-    screen.geometry("150x100")
+    screen3 = Toplevel(screen)
+    screen3.geometry("100x100")
     Button(screen3, text="Try Again", command = delete).pack()
-    login()
 
 
 
@@ -42,7 +40,7 @@ def login_ver():
     UserVerify_entry.delete(0,END)
     IDVerify_entry.delete(0, END)
     if checkUser(User1, ID1):
-        """""""#login_Sucess()"""
+        """""""#login_Sucess()"""#Write Function for entrance game
     else:
         NoUser()
         delete1()
@@ -63,11 +61,9 @@ def login():
     screen2.geometry("300x250")
     Label(screen2, text="Enter Your Details below: ").pack()
     Label(screen2, text="").pack()
-
     UserNameVerify = StringVar()
     IDVerify = StringVar()
-
-    Label(screen2 , text="User Name *").pack()
+    Label(screen2, text="User Name *").pack()
     UserVerify_entry = Entry(screen2, textvariable=UserNameVerify)
     UserVerify_entry.pack()
     Label(screen2, text="ID *").pack()

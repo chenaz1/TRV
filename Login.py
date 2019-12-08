@@ -4,6 +4,10 @@ from tinydb import TinyDB, Query
 
 
 def reg_user():
+    """
+    func' that gets users id and name and adds to the database
+    :return:
+    """
     Username_info = UserName.get()
     ID_info = PersonID.get()
     RegUser(Username_info, ID_info)
@@ -12,7 +16,12 @@ def reg_user():
     Label(screen1, text="Register Sucsessfuly added").pack()
 
 
+
 def register():
+    """
+    Register screen
+    :return:
+    """
     global UserName
     global PersonID
     global ID_entry
@@ -35,12 +44,55 @@ def register():
     Label(screen1, text="").pack()
     Button(screen1, text="register", width=10, height=1, command=reg_user).pack()
 
+def login_ver():
+    User1=UserNameVerify.get()
+    ID1 = IDVerify.get()
+
+    UserVerify_entry.delete(0,END)
+    IDVerify_entry.delete(0, END)
+    if (checkUser(User1, ID1)):
+        {}#ContinueFunc
+    else:
+        print("Wrong Values")
+        #continueFunc
+
+
+
 
 def login():
-    print("Login")
+    """
+    Log in Screen
+    :return:
+    """
+    global screen2
+    global UserNameVerify
+    global IDVerify
+    global UserVerify_entry
+    global IDVerify_entry
+    screen2 = Toplevel(screen)
+    screen2.title("Login Trivia")
+    screen2.geometry("300x250")
+    Label(screen2, text="Enter Your Details below: ").pack()
+    Label(screen2, text="").pack()
+
+    UserNameVerify = StringVar()
+    IDVerify = StringVar()
+
+    Label(screen2 , text="User Name *").pack()
+    UserVerify_entry = Entry(screen2, textvariable=UserNameVerify)
+    UserVerify_entry.pack()
+    Label(screen2, text="ID *").pack()
+    IDVerify_entry = Entry(screen2, textvariable=IDVerify)
+    IDVerify_entry.pack()
+    Label(screen2, text="").pack()
+    Button(screen2, text="Log in", width=10, height=1, command = login_ver).pack()
 
 
 def main_screen():
+    """
+    Main screen the from there i choose wheather i want to register or log in
+    :return:
+    """
     global screen
     screen = Tk()
     screen.geometry("300x250")

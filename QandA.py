@@ -15,7 +15,7 @@ def new_question(): #enter new question and 3 answer to DB
     print("The question stock: ", questions.all())
 
 def find_answer(question,answer):
-    if questions.search(find.answer == answer & find.question==question):
+    if questions.search(find.question==question & find.answer.all == answer ):
         return True
     return False
 

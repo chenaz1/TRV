@@ -8,9 +8,10 @@ userDB.purge()
 def checkUser(name, id_num):
     # return true if user exist in DB
     tmp = Query()
-    if userDB.search((tmp.name == name) & (tmp.id == id_num)):
+    if userDB.search(tmp['name'] == name) and userDB.search(tmp['id'] == id_num):
         return True
-    return False
+    else:
+        return False
 
 
 def RegUser(name, id_num):
@@ -32,7 +33,7 @@ def RegUser(name, id_num):
 def checkPermit(idn, role):
     # return true if user have permit 'role'
     tmp = Query()
-    if userDB.search((tmp['role'] == role) & (tmp['id'] == idn)):
+    if userDB.search((tmp['role'] == role) and (tmp['id'] == idn)):
         return True
     return False
 
@@ -43,9 +44,9 @@ def canSeeQuesion(idn):
 
 
 class TestUser(unittest.TestCase):
-    RegUser('tman', '!123') #test manager user
-    RegUser('tpar', '*123') #test parent user
-    RegUser('tkid', '123') #test kid user
+    RegUser('tman', '!123')  # test manager user
+    RegUser('tpar', '*123')  # test parent user
+    RegUser('tkid', '123')  # test kid user
 
     def test_ability_to_test(self):
         x = 1
@@ -53,20 +54,23 @@ class TestUser(unittest.TestCase):
 
     def test_RegUser(self):
         test = Query()
-        self.assertTrue(userDB.search(test['name'] == 'tman'))
-        self.assertTrue(userDB.search(test['name'] == 'tkid'))
-        self.assertTrue(userDB.search(test['id'] == '!123'))
-        self.assertTrue(userDB.search(test['id'] == '*123'))
-        self.assertTrue(userDB.search(test['id'] == '123'))
+        self.assertTrue(userDB.search((test['name'] == 'tman') and (test['id'] == '!123')))
+        self.assertTrue(userDB.search((test['name'] == 'tpar') and (test['id'] == '*123')))
+        self.assertTrue(userDB.search((test['name'] == 'tkid') and (test['id'] == '123')))
 
     def test_CheckPermit(self):
         self.assertTrue(checkPermit('!123', 1))
-        self.assertTrue(checkPermit('*123',2))
-        self.assertTrue(checkPermit('123',3))
+        self.assertTrue(checkPermit('*123', 2))
+        self.assertTrue(checkPermit('123', 3))
+
+    def test_checkUser(self):
+        self.assertTrue(checkUser('tman', '!123'))
+        self.assertFalse(checkUser('ghost', '!123'))
+        self.assertTrue(checkUser('tpar','*123'))
+        self.assertFalse(checkUser('roei','!123'))
 
 
 unittest.main()
-
 
 RegUser('man', '!123456')
 RegUser('man', '!1234')

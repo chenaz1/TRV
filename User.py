@@ -2,13 +2,12 @@ from tinydb import TinyDB, Query
 import unittest
 
 userDB: TinyDB = TinyDB('UserDB.json')
-userDB.purge()
 
 
 def checkUser(name, id_num):
     # return true if user exist in DB
     tmp = Query()
-    if userDB.search(tmp['name'] == name) and userDB.search(tmp['id'] == id_num):
+    if userDB.search((tmp.name == name) & (tmp.id == id_num)):
         return True
     else:
         return False
@@ -21,6 +20,7 @@ def RegUser(name, id_num):
     if checkUser(name, id_num):
         print('user exist in DataBase!')
     else:
+        # role
         if id_num[0] == '!':
             role = 1  # Manager
         elif id_num[0] == '*':
@@ -31,16 +31,21 @@ def RegUser(name, id_num):
 
 
 def checkPermit(idn, role):
+    # IN: idn[str] = id number, role[int] = role
     # return true if user have permit 'role'
     tmp = Query()
-    if userDB.search((tmp['role'] == role) and (tmp['id'] == idn)):
+    if userDB.search((tmp.id == idn) & (tmp.role == role)):
         return True
-    return False
+    else:
+        return False
 
 
-def canSeeQuesion(idn):
-    tmp = Query()
-    userDB.search(tmp.id == idn)
+def canSeeData(idn):
+    # IN id number OUT: return true if parent or manager
+    if checkPermit(idn, 1) or checkPermit(idn, 2):
+        return True
+    else:
+        return False
 
 
 class TestUser(unittest.TestCase):
@@ -54,9 +59,9 @@ class TestUser(unittest.TestCase):
 
     def test_RegUser(self):
         test = Query()
-        self.assertTrue(userDB.search((test['name'] == 'tman') and (test['id'] == '!123')))
-        self.assertTrue(userDB.search((test['name'] == 'tpar') and (test['id'] == '*123')))
-        self.assertTrue(userDB.search((test['name'] == 'tkid') and (test['id'] == '123')))
+        self.assertTrue(userDB.search((test['name'] == 'tman') & (test['id'] == '!123')))
+        self.assertTrue(userDB.search((test['name'] == 'tpar') & (test['id'] == '*123')))
+        self.assertTrue(userDB.search((test['name'] == 'tkid') & (test['id'] == '123')))
 
     def test_CheckPermit(self):
         self.assertTrue(checkPermit('!123', 1))
@@ -66,13 +71,14 @@ class TestUser(unittest.TestCase):
     def test_checkUser(self):
         self.assertTrue(checkUser('tman', '!123'))
         self.assertFalse(checkUser('ghost', '!123'))
-        self.assertTrue(checkUser('tpar','*123'))
-        self.assertFalse(checkUser('roei','!123'))
+        self.assertTrue(checkUser('tpar', '*123'))
+        self.assertFalse(checkUser('roei', '!123'))
+
+    def test_CSQ(self):
+        self.assertTrue(canSeeData('!123'))
+        self.assertFalse(canSeeData('123'))
+        self.assertTrue(canSeeData('*123'))
+        self.assertFalse(canSeeData('1234'))
 
 
 unittest.main()
-
-RegUser('man', '!123456')
-RegUser('man', '!1234')
-RegUser('parent', '*123')
-RegUser('kid', '123')

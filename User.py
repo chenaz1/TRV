@@ -1,6 +1,8 @@
 from tinydb import TinyDB, Query
+import unittest
 
 userDB: TinyDB = TinyDB('UserDB.json')
+userDB.purge()
 
 
 def checkUser(name, id_num):
@@ -28,21 +30,45 @@ def RegUser(name, id_num):
 
 
 def checkPermit(idn, role):
-    # return true if user have permit
+    # return true if user have permit 'role'
     tmp = Query()
-    if userDB.search((tmp['role'] == role) & (tmp.id == idn)):
+    if userDB.search((tmp['role'] == role) & (tmp['id'] == idn)):
         return True
     return False
+
 
 def canSeeQuesion(idn):
     tmp = Query()
     userDB.search(tmp.id == idn)
-userDB.purge()
+
+
+class TestUser(unittest.TestCase):
+    RegUser('tman', '!123') #test manager user
+    RegUser('tpar', '*123') #test parent user
+    RegUser('tkid', '123') #test kid user
+
+    def test_ability_to_test(self):
+        x = 1
+        self.assertEqual(x, 1)
+
+    def test_RegUser(self):
+        test = Query()
+        self.assertTrue(userDB.search(test['name'] == 'tman'))
+        self.assertTrue(userDB.search(test['name'] == 'tkid'))
+        self.assertTrue(userDB.search(test['id'] == '!123'))
+        self.assertTrue(userDB.search(test['id'] == '*123'))
+        self.assertTrue(userDB.search(test['id'] == '123'))
+
+    def test_CheckPermit(self):
+        self.assertTrue(checkPermit('!123', 1))
+        self.assertTrue(checkPermit('*123',2))
+        self.assertTrue(checkPermit('123',3))
+
+
+unittest.main()
+
+
 RegUser('man', '!123456')
-RegUser('man','!123456')
-RegUser('man','!1234')
+RegUser('man', '!1234')
 RegUser('parent', '*123')
 RegUser('kid', '123')
-
-
-
